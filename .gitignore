@@ -1,1 +1,12 @@
+# Android Studio default ignore rules
+*.iml
+.gradle
+/local.properties
+/.idea/workspace.xml
+/.idea/libraries
+.DS_Store
+/build
+/captures
+
+# Ignore all target files
 *.pdf
