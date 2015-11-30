@@ -1,6 +1,6 @@
-# Bash shell script
+# Bash shell script 登入實作
+感謝 Orinx 慷慨捐贈
 
-## Orinx 慷慨捐贈
 ```bash
 #!/bin/sh
 #Your NTOU Account
