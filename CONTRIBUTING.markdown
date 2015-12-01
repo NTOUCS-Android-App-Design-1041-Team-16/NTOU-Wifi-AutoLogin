@@ -18,6 +18,11 @@ However please consider following regulations:
 ### 來源程式碼風格<br />Coding Style
 * 使用 Tab 字元進行縮排
 
+### 版本提交<br />Commit
+* 使用容易理解的版本提交標題
+* 若變更內容很顯而易見可省略版本提交詳細說明
+* 請加上 `Signed-Off-By:` 簽名，確認您修改的內容不涉及到任何第三方智慧財產侵害
+
 ## 宣傳本專案給別人<br />Promote!
 將本專案宣傳出去，讓更多人知道有這個專案！  
 Promote this project so that more people recognize it!
