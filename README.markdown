@@ -4,8 +4,8 @@
 ![logo](UI%20design/logo.png)
 
 ## 本專案的智慧財產授權條款<br />Intellectual Property License of This Project
-尚未指定財產授權條款，保留所有權利  
-Haven't select a intellectual property license, ALL RIGHTS RESERVED
+[GNU GPL 第 3 或其任意更近期版本授權條款](http://www.gnu.org/licenses/gpl.html)  
+[GNU GPLv3+](http://www.gnu.org/licenses/gpl.html)
 
 ## 如何對本專案做出貢獻<br />How to Contribute to This Project
 請參考[如何對本專案做出貢獻](CONTRIBUTING.markdown)。  
