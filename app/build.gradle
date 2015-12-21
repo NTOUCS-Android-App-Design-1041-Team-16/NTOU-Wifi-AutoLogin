@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "tw.edu.ntou.cs.android_app_design.semester1041.team16.ntou_wifi_autologin"
-        minSdkVersion 15
+        minSdkVersion 7
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
