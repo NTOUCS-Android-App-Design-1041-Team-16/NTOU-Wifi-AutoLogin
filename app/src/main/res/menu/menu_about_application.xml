@@ -1,7 +1,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:app="http://schemas.android.com/apk/res-auto"
       xmlns:tools="http://schemas.android.com/tools"
-      tools:context="tw.edu.ntou.cs.android_app_design.semester1041.team16.ntou_wifi_autologin.MainActivity">
+      tools:context=".AboutApplicationActivity">
     <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"

@@ -10,8 +10,8 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="tw.edu.ntou.cs.android_app_design.semester1041.team16.ntou_wifi_autologin.MainActivity"
-    tools:showIn="@layout/activity_main">
+    tools:context=".AboutApplicationActivity"
+    tools:showIn="@layout/activity_about_application">
 
     <TextView
         android:layout_width="wrap_content"
