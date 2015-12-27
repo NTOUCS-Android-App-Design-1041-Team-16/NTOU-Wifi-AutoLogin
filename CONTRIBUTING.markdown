@@ -10,6 +10,11 @@ If you want to report software bug please provide us **bug reproduce steps** so 
 要參與程式開發的話歡迎[建立您的分支版本倉庫](https://github.com/NTOUCS-Android-App-Design-1041-Team-16/NTOU-Wifi-AutoLogin/fork)後拓製(clone)一份到本地端，建立並切換至一個新的 Git 分支(branch)完成編輯後提交(commit)為一個新版本，推送(push)到您的 GitHub 遠端版本倉庫再跟我們[建檔拉取請求(pull request)](https://github.com/NTOUCS-Android-App-Design-1041-Team-16/NTOU-Wifi-AutoLogin/pull/new)。  
 [Create your fork repository](https://github.com/NTOUCS-Android-App-Design-1041-Team-16/NTOU-Wifi-AutoLogin/fork), create and switch to a new Git branch, do your edits and commit as a new version, push them to your remote repository on GitHub and [file us a pull request](https://github.com/NTOUCS-Android-App-Design-1041-Team-16/NTOU-Wifi-AutoLogin/pull/new)!
 
+建構開發環境
+* 到Oracle官方的下載網站：http://www.oracle.com/technetwork/java/javase/downloads/，下載與安裝Java  JDK
+* 到Android開發人員網站：http://developer.android.com/sdk/，進入之後下載並安裝「Android Studio」。安裝好之後啟動，會自動下載安裝Android SDK，照著指示做即可。
+* 找到「SDK Manager」並點選，找到「Extra」目錄，勾選「Android Support Library」、「Google Play services」選擇「Install 2 packages…」開始安裝，當畫面左下方顯示「Done loading packages」代表安裝完畢，就可以關閉Manager視窗了。
+
 然而請注意以下幾點規範：  
 However please consider following regulations:
 
