@@ -10,3 +10,7 @@
 
 # Ignore all target files
 *.pdf
+
+# 不追蹤所有的 PNG 圖示，我們在建構專案前會自己把 SVG 轉成 PNG
+*.png
+

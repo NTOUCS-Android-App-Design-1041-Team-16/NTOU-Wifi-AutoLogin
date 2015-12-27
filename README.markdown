@@ -1,7 +1,7 @@
 # 海大 Wifi 自動登入<br />NTOU Wifi AutoLogin
 「海大 Wifi 自動登入」為用來簡化[海洋大學校園無線網路](海洋大學校園無線網路)登入程序的應用軟體。  
-<https://github.com/NTOUCS-Android-App-Design-1041-Team-16/NTOU-Wifi-AutoLogin>
-![logo](UI%20design/logo.png)
+<https://github.com/NTOUCS-Android-App-Design-1041-Team-16/NTOU-Wifi-AutoLogin>  
+![Application logo](UI%20design/Application%20logo.svg)
 
 ## 本專案的智慧財產授權條款<br />Intellectual Property License of This Project
 [GNU GPL 第 3 或其任意更近期版本授權條款](http://www.gnu.org/licenses/gpl.html)  
