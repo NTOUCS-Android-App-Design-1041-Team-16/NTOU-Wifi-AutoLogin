@@ -1,3 +1,6 @@
+// 用於「每次建構時自動遞增 versionCode，讓行動裝置知道這是在升級」
+import java.util.regex.Pattern
+
 apply plugin: 'com.android.application'
 
 android {
@@ -8,8 +11,6 @@ android {
         applicationId "tw.edu.ntou.cs.android_app_design.semester1041.team16.ntou_wifi_autologin"
         minSdkVersion 7
         targetSdkVersion 23
-        versionCode 3
-        versionName "0.4.0-developing"
     }
     buildTypes {
         release {
@@ -24,4 +25,25 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:23.1.1'
     compile 'com.android.support:design:23.1.1'
+}
+
+// 每次建構時自動遞增 versionCode，讓行動裝置知道這是在升級
+// 參考資料：
+//build - How to autoincrement versionCode in Android Gradle - Stack Overflow
+//http://stackoverflow.com/questions/17448565/how-to-autoincrement-versioncode-in-android-gradle
+task('increaseVersionCode') << {
+    def manifestFile = file("src/main/AndroidManifest.xml")
+    def pattern = Pattern.compile("versionCode=\"(\\d+)\"")
+    def manifestText = manifestFile.getText()
+    def matcher = pattern.matcher(manifestText)
+    matcher.find()
+    def versionCode = Integer.parseInt(matcher.group(1))
+    def manifestContent = matcher.replaceAll("versionCode=\"" + ++versionCode + "\"")
+    manifestFile.write(manifestContent)
+}
+
+tasks.whenTaskAdded { task ->
+    if (task.name == 'generateReleaseBuildConfig' || task.name == 'generateDebugBuildConfig') {
+        task.dependsOn 'increaseVersionCode'
+    }
 }
