@@ -24,6 +24,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/about_application_setup_prompt"
-            android:id="@+id/textView_setup_prompt"/>
+            android:id="@+id/textView_setup_prompt"
+            android:layout_marginTop="@dimen/activity_vertical_margin"/>
 
 </LinearLayout>
