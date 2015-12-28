@@ -2,4 +2,12 @@
     <string name="app_name">海大 Wifi 自動登入</string>
 <!-- Android Studio 範例內容
     <string name="action_settings">設定</string>-->
+    <string name="about_application_introduction">《海大 Wifi 自動登入》是用來實現智慧型行動裝置自動登入「海洋大學校園無線網路」的應用軟體。</string>
+    <string name="about_application_setup_prompt">如您尚未設定登入資訊，請點擊右下角的「設定」圖示開始設定；如果您已經設定好了當您在連上海洋大學校園無線網路時本軟體便會自動在背景進行登入的動作，不需要再啟動本軟體。</string>
+    <string name="login_settings_header">連線設定</string>
+    <string name="login_settings_student_id">學號：</string>
+    <string name="login_settings_password">密碼：</string>
+    <string name="login_settings_checkbox_is_autologin">連線到海大無線網路時自動登入</string>
+    <string name="login_settings_checkbox_login_even_if_network_is_unsafe">即使偵測到網路有問題仍登入網路（危險！）</string>
+    <string name="login_settings_button_manual_login">手動登入</string>
 </resources>
