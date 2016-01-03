@@ -13,6 +13,7 @@ public class LoginSettings extends AppCompatActivity {
 		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_login_settings);
 		setSupportActionBar(toolbar);
 
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 	}
 
 }

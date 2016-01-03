@@ -83,9 +83,4 @@
 		android:id="@+id/button"
 		android:layout_gravity="center_horizontal"/>
 
-	<TextView
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:gravity="center_horizontal"
-		android:text="@string/login_settings_return_hint"/>
 </LinearLayout>

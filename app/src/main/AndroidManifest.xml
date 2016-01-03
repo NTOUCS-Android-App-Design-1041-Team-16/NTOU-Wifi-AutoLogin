@@ -2,7 +2,7 @@
 <manifest package="tw.edu.ntou.cs.android_app_design.semester1041.team16.ntou_wifi_autologin"
 					xmlns:android="http://schemas.android.com/apk/res/android"
 					android:versionName="0.4.0-developing"
-					android:versionCode="74">
+					android:versionCode="85">
 
 	<application
 		android:allowBackup="true"
@@ -21,11 +21,16 @@
 		<activity
 			android:name=".LoginSettings"
 			android:label="@string/login_settings_header"
-			android:theme="@style/AppTheme.NoActionBar">
+			android:theme="@style/AppTheme.NoActionBar"
+			android:parentActivityName=".AboutApplicationActivity">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN"/>
 				<category android:name="android.intent.category.DEFAULT"/>
 			</intent-filter>
+			<!-- Parent activity meta-data to support 4.0 and lower -->
+			<meta-data
+				android:name="android.support.PARENT_ACTIVITY"
+				android:value=".AboutApplicationActivity" />
 		</activity>
 	</application>
 

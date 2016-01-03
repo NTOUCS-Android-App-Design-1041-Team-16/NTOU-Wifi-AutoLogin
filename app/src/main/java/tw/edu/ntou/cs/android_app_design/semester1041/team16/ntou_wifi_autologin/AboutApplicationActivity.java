@@ -3,10 +3,12 @@ package tw.edu.ntou.cs.android_app_design.semester1041.team16.ntou_wifi_autologi
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.method.LinkMovementMethod;
 import android.view.MenuInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.content.Intent;
+import android.widget.TextView;
 
 public class AboutApplicationActivity extends AppCompatActivity {
 
@@ -16,6 +18,8 @@ public class AboutApplicationActivity extends AppCompatActivity {
 		setContentView(R.layout.activity_about_application);
 		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_about_application);
 		setSupportActionBar(toolbar);
+		TextView issue_url_link = (TextView) findViewById(R.id.textView_about_application_issue_tracker_url);
+		issue_url_link.setMovementMethod(LinkMovementMethod.getInstance());
 	}
 
 	@Override
