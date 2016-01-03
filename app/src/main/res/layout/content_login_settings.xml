@@ -68,7 +68,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/login_settings_button_manual_login"
+        android:text="@string/login_settings_button_login_test"
         android:id="@+id/button"
         android:layout_gravity="center_horizontal"/>
 
