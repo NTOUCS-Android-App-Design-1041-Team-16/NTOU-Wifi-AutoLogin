@@ -41,18 +41,18 @@
 		android:paddingRight="@dimen/activity_horizontal_margin">
 
 		<TextView
+			android:id="@+id/textView_login_settings_prompt_password"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:textAppearance="?android:attr/textAppearanceMedium"
-			android:text="@string/login_settings_password"
-			android:id="@+id/textView_login_settings_prompt_password"/>
+			android:text="@string/login_settings_password"/>
 
 		<EditText
+			android:id="@+id/editText_login_settings_password"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:inputType="textPassword"
-			android:ems="10"
-			android:id="@+id/editText_login_settings_password"/>
+			android:ems="10"/>
 
 	</LinearLayout>
 
