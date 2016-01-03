@@ -11,4 +11,5 @@
 	<string name="login_settings_checkbox_is_autologin">連線到海大無線網路時自動登入</string>
 	<string name="login_settings_checkbox_login_even_if_network_is_unsafe">即使偵測到網路有問題仍登入網路（危險！）</string>
 	<string name="login_settings_button_login_test">手動登入／登入測試</string>
+	<string name="login_settings_return_hint">設定完成後請按下「返回」鍵離開</string>
 </resources>

@@ -14,8 +14,8 @@
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
 		android:orientation="horizontal"
-		android:layout_marginTop="@dimen/activity_horizontal_margin"
-		android:layout_marginLeft="@dimen/activity_horizontal_margin">
+		android:paddingLeft="@dimen/activity_horizontal_margin"
+		android:paddingRight="@dimen/activity_horizontal_margin">
 
 		<TextView
 			android:layout_width="wrap_content"
@@ -34,10 +34,11 @@
 	</LinearLayout>
 
 	<LinearLayout
-		android:layout_width="wrap_content"
+		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
 		android:orientation="horizontal"
-		android:layout_marginLeft="@dimen/activity_horizontal_margin">
+		android:paddingLeft="@dimen/activity_horizontal_margin"
+		android:paddingRight="@dimen/activity_horizontal_margin">
 
 		<TextView
 			android:layout_width="wrap_content"
@@ -58,7 +59,8 @@
 	<CheckBox
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:layout_marginLeft="@dimen/activity_horizontal_margin"
+		android:paddingLeft="@dimen/activity_horizontal_margin"
+		android:paddingRight="@dimen/activity_horizontal_margin"
 		android:text="@string/login_settings_checkbox_is_autologin"
 		android:id="@+id/checkBox_login_settings_checkbox_is_autologin"
 		android:checked="true"/>
@@ -66,7 +68,8 @@
 	<CheckBox
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:layout_marginLeft="@dimen/activity_horizontal_margin"
+		android:paddingLeft="@dimen/activity_horizontal_margin"
+		android:paddingRight="@dimen/activity_horizontal_margin"
 		android:text="@string/login_settings_checkbox_login_even_if_network_is_unsafe"
 		android:id="@+id/checkBox_login_settings_checkbox_login_even_if_network_is_unsafe"
 		android:textColor="@color/text_warning_color"
@@ -75,8 +78,14 @@
 	<Button
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
+		android:paddingTop="@dimen/activity_horizontal_margin"
 		android:text="@string/login_settings_button_login_test"
 		android:id="@+id/button"
 		android:layout_gravity="center_horizontal"/>
 
+	<TextView
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:gravity="center_horizontal"
+		android:text="@string/login_settings_return_hint"/>
 </LinearLayout>
