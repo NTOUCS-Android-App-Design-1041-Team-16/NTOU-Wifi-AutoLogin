@@ -2,7 +2,7 @@
 <manifest package="tw.edu.ntou.cs.android_app_design.semester1041.team16.ntou_wifi_autologin"
 					xmlns:android="http://schemas.android.com/apk/res/android"
 					android:versionName="0.4.0-developing"
-					android:versionCode="99">
+					android:versionCode="127">
 
 	<application
 		android:allowBackup="true"
@@ -19,7 +19,7 @@
 			</intent-filter>
 		</activity>
 		<activity
-			android:name=".LoginSettings"
+			android:name=".LoginSettingsActivity"
 			android:label="@string/login_settings_header"
 			android:theme="@style/AppTheme.NoActionBar"
 			android:parentActivityName=".AboutApplicationActivity">
@@ -32,6 +32,13 @@
 				android:name="android.support.PARENT_ACTIVITY"
 				android:value=".AboutApplicationActivity" />
 		</activity>
-	</application>
 
+		<receiver android:name=".AutoLoginReceiver">
+			<intent-filter>
+				<action android:name="android.net.wifi.STATE_CHANGE"/>
+			</intent-filter>
+		</receiver>
+	</application>
+	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 </manifest>

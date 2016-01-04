@@ -37,7 +37,7 @@ public class AboutApplicationActivity extends AppCompatActivity {
 		// as you specify a parent activity in AndroidManifest.xml.
 		switch (item.getItemId()) {
 			case R.id.action_login_settings:
-				Intent intent = new Intent(this, LoginSettings.class);
+				Intent intent = new Intent(this, LoginSettingsActivity.class);
 				startActivity(intent);
 				break;
 			default:

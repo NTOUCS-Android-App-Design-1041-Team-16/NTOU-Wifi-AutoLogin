@@ -9,7 +9,7 @@ android {
 
     defaultConfig {
         applicationId "tw.edu.ntou.cs.android_app_design.semester1041.team16.ntou_wifi_autologin"
-        minSdkVersion 7
+        minSdkVersion 9
         targetSdkVersion 23
     }
     buildTypes {

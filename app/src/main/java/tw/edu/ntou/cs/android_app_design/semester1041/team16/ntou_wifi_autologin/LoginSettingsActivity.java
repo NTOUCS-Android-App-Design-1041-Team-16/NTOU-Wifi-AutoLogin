@@ -8,9 +8,9 @@ import android.support.v7.widget.Toolbar;
 import android.widget.EditText;
 import android.util.Log;
 
-public class LoginSettings extends AppCompatActivity {
-	private static final String TAG = "LoginSettings";
-	private static final String CONFIG_FILENAME = "NTOU_Wifi_Autologin.LoginSettings";
+public class LoginSettingsActivity extends AppCompatActivity {
+	private static final String TAG = "LoginSettingsActivity";
+	protected static final String CONFIG_FILENAME = "NTOU_Wifi_Autologin.LoginSettingsActivity";
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
