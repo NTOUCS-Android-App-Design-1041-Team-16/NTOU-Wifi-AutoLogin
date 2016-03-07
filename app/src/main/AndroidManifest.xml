@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest package="tw.edu.ntou.cs.android_app_design.semester1041.team16.ntou_wifi_autologin"
 					xmlns:android="http://schemas.android.com/apk/res/android"
-					android:versionName="0.4.0-developing"
-					android:versionCode="127">
+					android:versionName="0.4.0-alpha"
+					android:versionCode="166">
 
 	<application
 		android:allowBackup="true"
 		android:icon="@mipmap/application_logo"
-		android:label="@string/app_name"
+		android:lab="@string/app_name"
 		android:supportsRtl="true"
 		android:theme="@style/AppTheme">
 		<activity

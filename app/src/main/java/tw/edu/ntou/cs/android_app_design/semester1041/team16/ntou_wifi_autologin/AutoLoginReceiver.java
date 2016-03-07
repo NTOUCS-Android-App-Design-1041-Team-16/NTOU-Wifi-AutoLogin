@@ -30,6 +30,7 @@ public class AutoLoginReceiver extends BroadcastReceiver {
 	private String student_id;
 	private String password;
 
+
 	@Override
 	public void onReceive(Context context, Intent intent){
 		Log.v(TAG, "自動登入服務啟動");
@@ -47,10 +48,13 @@ public class AutoLoginReceiver extends BroadcastReceiver {
 			if(!isConnectedViaWifi(context)){
 				return;
 			}
+
 			Log.v(TAG, "SSID:".concat(manager.getConnectionInfo().getSSID()));
+
 			if(/*manager.getConnectionInfo().getSSID() != "NTOU"*/ true){
 				return;
-			}else{
+			}
+			else{
 				try {
 					CookieManager cookiemanager = new CookieManager();
 					CookieHandler.setDefault(cookiemanager);
@@ -64,7 +68,7 @@ public class AutoLoginReceiver extends BroadcastReceiver {
 					connection.setRequestProperty("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.9; rv:26.0) Gecko/20100101 Firefox/26.0");
 					connection.setDoOutput(true);
 
-					DataOutputStream wr = new 					DataOutputStream(connection.getOutputStream());
+					DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
 					wr.writeBytes("username=".concat(student_id).concat("&password=".concat(password).concat("&ok=").concat("登入")));
 					Map<String, List<String>> headerFields = connection.getHeaderFields();
 					List<String> cookiesHeader = headerFields.get(COOKIES_HEADER);

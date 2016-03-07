@@ -5,18 +5,29 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.util.Log;
+import android.widget.Toast;
 
 public class LoginSettingsActivity extends AppCompatActivity {
 	private static final String TAG = "LoginSettingsActivity";
 	protected static final String CONFIG_FILENAME = "NTOU_Wifi_Autologin.LoginSettingsActivity";
+	private Button manualBtn;
+	private EditText studentNum, password;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login_settings);
 		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_login_settings);
 		setSupportActionBar(toolbar);
+
+		manualBtn = (Button) findViewById(R.id.button);
+		manualBtn.setOnClickListener(manualListener);
+
+		studentNum = (EditText) findViewById(R.id.editText_login_settings_student_id);
+		password = (EditText) findViewById(R.id.editText_login_settings_password);
 
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		loadPreferences();
@@ -39,6 +50,25 @@ public class LoginSettingsActivity extends AppCompatActivity {
 
 		savePreferences();
 	}
+
+	private View.OnClickListener manualListener = new View.OnClickListener() {
+
+		@Override
+		public void onClick(View v) {
+			if(studentNum.getText().toString().length() == 0)
+				Toast.makeText(getApplicationContext(), "請輸入學號", Toast.LENGTH_SHORT).show();
+			else if(password.getText().toString().length() == 0)
+				Toast.makeText(getApplicationContext(), "請輸入密碼", Toast.LENGTH_SHORT).show();
+			else {
+				savePreferences();
+				//Using libs: okHttp-utils
+				//1. secure.login.....
+				//2. https://140.121.40.253/user/user_login_auth.jsp?
+
+			}
+
+		}
+	};
 
 	public void loadPreferences(){
 

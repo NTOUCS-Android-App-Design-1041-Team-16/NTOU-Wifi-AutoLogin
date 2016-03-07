@@ -21,7 +21,7 @@
 		android:layout_height="wrap_content"
 		android:layout_below="@id/toolbar_about_application"
 		android:layout_centerHorizontal="true"
-		android:src="@mipmap/application_logo"
+		android:src="@mipmap/ic_launcher"
 		android:contentDescription="@string/about_application_logo_description"/>
 
 	<TextView

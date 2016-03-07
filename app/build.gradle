@@ -5,11 +5,11 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "23.0.2"
+    buildToolsVersion "21.0.1"
 
     defaultConfig {
         applicationId "tw.edu.ntou.cs.android_app_design.semester1041.team16.ntou_wifi_autologin"
-        minSdkVersion 9
+        minSdkVersion 16
         targetSdkVersion 23
     }
     buildTypes {
@@ -25,6 +25,7 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:23.1.1'
     compile 'com.android.support:design:23.1.1'
+    compile 'com.zhy:okhttputils:2.3.5'
 }
 
 // 每次建構時自動遞增 versionCode，讓行動裝置知道這是在升級
