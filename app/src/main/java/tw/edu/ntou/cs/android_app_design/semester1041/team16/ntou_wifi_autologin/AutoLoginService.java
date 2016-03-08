@@ -1,32 +1,71 @@
 package tw.edu.ntou.cs.android_app_design.semester1041.team16.ntou_wifi_autologin;
 
-import android.app.IntentService;
+import android.app.NotificationManager;
+import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.net.wifi.WifiManager;
+import android.os.IBinder;
+import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
+import android.widget.Toast;
 
-public class AutoLoginService extends IntentService {
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.StringCallback;
 
-	public AutoLoginService(){
-		super("AutoLoginService");
-	}
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.CookieHandler;
+import java.net.CookieManager;
+import java.net.HttpCookie;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.List;
+import java.util.Map;
+
+import okhttp3.Call;
+
+public class AutoLoginService extends Service {
 
 	private static final String TAG = "AutoLoginService";
+
+	private boolean checkUrlConnect = false;
+	private boolean checkUrlConnect2 = false;
+
+	static final String COOKIES_HEADER = "Set-Cookie";
 
 	String student_id = "";
 	String password = "";
 
-	protected void onHandleIntent(Intent i){
-		Log.v(TAG, "自動登入服務啟動");
-		loadPreferences();
-		NotificationCompat.Builder builder = new NotificationCompat.Builder(this).setSmallIcon(R.mipmap.application_logo).setContentTitle("正在自動登入海大校園無線網路……").setContentText("請稍候片刻");
-	}
+	NotificationCompat.Builder builder;
+	NotificationManager mNotificationManager;
+
 
 	public void onDestroy(){
 		super.onDestroy();
 		Log.v(TAG, "自動登入服務中止");
+	}
+
+	@Nullable
+	@Override
+	public IBinder onBind(Intent intent) {
+		return null;
+	}
+
+	@Override
+	public void onStart(Intent intent, int startId) {
+		Log.v(TAG, "自動登入服務啟動");
+		loadPreferences();
+
+		LoginHandle handleLogin = new LoginHandle(getApplicationContext());
+		handleLogin.HandleLogin();
+
+		super.onStart(intent, startId);
 	}
 
 	public void loadPreferences(){
