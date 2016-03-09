@@ -27,17 +27,15 @@ public class AutoLoginService extends Service {
 	}
 
 	@Override
-	public void onStart(Intent intent, int startId) {
+	public void onCreate() {
 		Log.v(TAG, "自動登入服務啟動");
 		loadPreferences();
 
 		LoginHandle handleLogin = new LoginHandle(getApplicationContext());
 		handleLogin.HandleLogin();
-
-		super.onStart(intent, startId);
 	}
 
-	public void loadPreferences(){
+	public void loadPreferences()  {
 
 		Log.i(TAG, "載入設定……");
 		SharedPreferences config = getSharedPreferences(LoginSettingsActivity.CONFIG_FILENAME, Context.MODE_PRIVATE);
