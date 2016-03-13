@@ -76,11 +76,8 @@ public class LoginHandle {
                     Toast.makeText(context.getApplicationContext(), "請輸入密碼", Toast.LENGTH_SHORT).show();
                 } else {
                     //run php script
-                    /*
                     exec(context.getFilesDir().getPath() + "/php-cgi " + context.getFilesDir().getPath() + "/auth_with_arg.php " + String.valueOf('"') + ssid + String.valueOf('"') + " " + String.valueOf('"') + student_id + String.valueOf('"')
                             + " " + String.valueOf('"') + password + String.valueOf('"'));
-                    */
-                    exec(context.getFilesDir().getPath() + "/php-cgi -m");
                 }
             }
             else {
