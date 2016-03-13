@@ -1,55 +1,119 @@
 package tw.edu.ntou.cs.android_app_design.semester1041.team16.ntou_wifi_autologin;
 
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.content.Context;
+import android.content.res.AssetManager;
+import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.wifi.SupplicantState;
+import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.zhy.http.okhttp.OkHttpUtils;
-import com.zhy.http.okhttp.callback.StringCallback;
+import org.apache.commons.io.IOUtils;
 
-import java.io.DataOutputStream;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.CookieHandler;
-import java.net.CookieManager;
-import java.net.HttpCookie;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.List;
-import java.util.Map;
-
-import okhttp3.Call;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 
 public class LoginHandle {
     private Context context;
 
-    private static final String TAG = "AutoLoginService";
-
-    static final String COOKIES_HEADER = "Set-Cookie";
-
-    String student_id = "";
-    String password = "";
-
     NotificationCompat.Builder builder;
     NotificationManager mNotificationManager;
     WifiManager manager;
+    String scriptRes = "";
 
     public LoginHandle(Context context) {
         this.context = context;
     }
 
-    public void HandleLogin() {
+    public void HandleLogin(String student_id, String password) {
+        File phpRun = new File(context.getFilesDir().getPath() + "/php-cgi");
+        File phpLibs = new File(context.getFilesDir().getPath() + "/libs");
+        File phpScript = new File(context.getFilesDir().getPath() + "/auth_with_arg.php");
+
+        if (phpRun.exists() == false) {
+            copyAssetsExecute("php-cgi");
+            phpRun.setExecutable(true);
+        }
+        if(phpLibs.exists() == false) {
+            phpLibs.mkdirs();
+            copyAssetsExecute("LIB_http.php");
+            copyAssetsExecute("LIB_parse.php");
+
+        }
+        if(phpScript.exists() == false) {
+            copyAssetsExecute("auth_with_arg.php");
+        }
+
         manager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
         if (!isConnectedViaWifi(context)) {
             Log.e("non-wifi", "It did not use wifi");
+            processNotify("尚未啟用 Wifi！");
         }
         else {
-            isNetworkConnected();
+            String ssid = "";
+            WifiInfo wifiInfo = manager.getConnectionInfo();
+            if (wifiInfo.getSupplicantState() == SupplicantState.COMPLETED) {
+                ssid = wifiInfo.getSSID();
+                Log.e("ssid", ssid);
+            }
+
+            if(ssid.equals("") == false) {
+                if (student_id.length() == 0) {
+                    Toast.makeText(context.getApplicationContext(), "請輸入學校信箱", Toast.LENGTH_SHORT).show();
+                }
+                else if (password.length() == 0) {
+                    Toast.makeText(context.getApplicationContext(), "請輸入密碼", Toast.LENGTH_SHORT).show();
+                } else {
+                    //run php script
+                    exec(context.getFilesDir().getPath() + "/php-cgi " + context.getFilesDir().getPath() + "/auth_with_arg.php " + String.valueOf('"') + ssid + String.valueOf('"') + " " + String.valueOf('"') + student_id + String.valueOf('"')
+                            + " " + String.valueOf('"') + password + String.valueOf('"'));
+                }
+            }
+            else {
+                //notification 請確定連入的 SSID
+                processNotify("請確認連入的 SSID！");
+            }
+
+        }
+    }
+
+    private void copyAssetsExecute(String fileName) {
+        String appFileDirectory;
+        appFileDirectory = context.getFilesDir().getPath();
+        if(fileName.equals("php-cgi") == false && fileName.equals("auth_with_arg.php") == false)
+            appFileDirectory = context.getFilesDir().getPath() + "/libs";
+        AssetManager assets = context.getAssets();
+
+        InputStream in;
+        OutputStream out;
+
+        try {
+            in = assets.open(fileName);
+            File outFile;
+            outFile = new File(appFileDirectory, fileName);
+            out = new FileOutputStream(outFile);
+
+            //Apache common io libs jar https://commons.apache.org/proper/commons-io/
+            IOUtils.copy(in, out);
+            in.close();
+            out.flush();
+            out.close();
+
+            Log.e("copy-status", "Copy success: " + fileName);
+        } catch (IOException e) {
+            e.printStackTrace();
+            Log.e("error-copy", e.getMessage().toString());
         }
     }
 
@@ -59,167 +123,80 @@ public class LoginHandle {
         return mWifi.isConnected();
     }
 
-    private void isNetworkConnected() {
-        OkHttpUtils.get().url("https://www.google.com.tw")
-            .addHeader("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.9; rv:26.0) Gecko/20100101 Firefox/26.0")
-            .build()
-            .execute(new StringCallback() {
+    private void exec(String cmd) {
+        try {
+            Process process = Runtime.getRuntime().exec(cmd);
+            ProcessWithTimeout processWithTimeout = new ProcessWithTimeout(process);
+            int exitCode = processWithTimeout.waitForProcess(15000);
 
-                @Override
-                public void onError(Call call, Exception e) {
-                    Log.e("okhttp-network-status", e.getMessage());
+            if(exitCode == Integer.MIN_VALUE) {
+                //Timeout
+                //建立連線逾時！(notification)
+                processNotify("處理登入逾時！");
+            }
+
+            else {
+                BufferedReader reader = new BufferedReader(
+                        new InputStreamReader(process.getInputStream()));
+                int read;
+                char[] buffer = new char[4096];
+                StringBuffer output = new StringBuffer();
+                while ((read = reader.read(buffer)) > 0) {
+                    output.append(buffer, 0, read);
                 }
 
-                @Override
-                public void onResponse(String s) {
-                    if(s.contains("台東大學無線網路驗證系統")) {
-                        //checkConnectedLoginUrl("https://140.121.40.253/user/user_login_auth.jsp?");
-                        //http://www.gstatic.com/generate_204
-                        //http://10.1.230.254:1000/fgtauth?magic
-                    }
-                    else if(s.contains("海洋大學無線網路")) {
-                        checkConnectedLoginUrl("https://140.121.40.253/user/user_login_auth.jsp?");
-                    }
-                    else if(s.contains("USERNAME")) {
-                        checkConnectedLoginUrl("https://securelogin.arubanetworks.com/cgi-bin/login");
-                    }
-                    else {
-                        builder = new NotificationCompat.Builder(context).setSmallIcon(R.drawable.ic_stat_action_perm_scan_wifi).setContentTitle("校園無線網路").setContentText("已經連上網路").setAutoCancel(true);
+                reader.close();
+                process.waitFor();
 
-                        mNotificationManager =
-                                (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-
-                        mNotificationManager.notify(1, builder.build());
-                    }
+                if (output.toString().length() != 0) {
+                    Log.e("output-" + cmd, "output: " + output.toString());
+                    scriptRes = output.toString();
                 }
-            });
-    }
+                else {
+                    reader = new BufferedReader(
+                            new InputStreamReader(process.getErrorStream()));
 
-    private void loginWifi() {
+                    buffer = new char[4096];
+                    output = new StringBuffer();
 
-    }
-
-    private void checkConnectedLoginUrl(final String url) {
-
-        OkHttpUtils.get().url(url)
-                .addHeader("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.9; rv:26.0) Gecko/20100101 Firefox/26.0")
-                .build()
-                .execute(new StringCallback() {
-                    @Override
-                    public void onError(Call call, Exception e) {
-                        builder = new NotificationCompat.Builder(context).setSmallIcon(R.drawable.ic_stat_action_perm_scan_wifi).setContentTitle("校園無線網路").setContentText("目前校園網路訊號不佳，無法登入").setAutoCancel(true);
-
-                        mNotificationManager =
-                                (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-
-                        mNotificationManager.notify(1, builder.build());
-                        Log.e("GET-method-error", e.getMessage());
+                    while ((read = reader.read(buffer)) > 0) {
+                        output.append(buffer, 0, read);
                     }
 
-                    @Override
-                    public void onResponse(String response) {
-                        if (url.contains("secure")) {
-                            //login url: https://secure.....
-                            //1. fetch magic id (html parse)
-                            //2. request this url e-mail and password vi http method post
-                            //ref: https://github.com/peter279k/wifi_login_php
+                    reader.close();
 
-                            builder = new NotificationCompat.Builder(context).setSmallIcon(R.drawable.ic_stat_action_perm_scan_wifi).setContentTitle("正在自動登入校園無線網路……").setContentText("請稍候片刻").setAutoCancel(true);
+                    scriptRes = output.toString();
+                    Log.e("output-error-" + cmd, output.toString());
+                }
 
-                            mNotificationManager =
-                                    (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+                scriptRes = scriptRes.trim();
 
-                            mNotificationManager.notify(1, builder.build());
+                if(scriptRes.equals("It's auth or you are not in this wireless access point.")) {
+                    processNotify("已經正確連上網路或是還沒認證！");
+                }
+                else if(scriptRes.equals("auth_success")) {
+                    processNotify("登入成功！");
+                }
+                else {
+                    processNotify("登入失敗！");
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 
-                            OkHttpUtils.post().addParams("user", student_id)
-                                    .addParams("password", password)
-                                    .addParams("authenticate", "authenticate")
-                                    .addParams("accept_aup", "accept_aup")
-                                    .addParams("requested_url", "")
-                                    .addHeader("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.9; rv:26.0) Gecko/20100101 Firefox/26.0")
-                                    .build()
-                                    .execute(new StringCallback() {
-                                        @Override
-                                        public void onError(Call call, Exception e) {
-                                            Log.e("okHttp-response-error", e.getMessage());
-                                            builder = new NotificationCompat.Builder(context).setSmallIcon(R.drawable.ic_stat_action_perm_scan_wifi).setContentTitle("校園無線網路").setContentText("登入失敗").setAutoCancel(true);
-                                            mNotificationManager =
-                                                    (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-
-                                            mNotificationManager.notify(1, builder.build());
-                                        }
-
-                                        @Override
-                                        public void onResponse(String response) {
-                                            Log.e("okHttp-response", response);
-                                            builder = new NotificationCompat.Builder(context).setSmallIcon(R.drawable.ic_stat_action_perm_scan_wifi).setContentTitle("已經完成登入程序").setContentText("如仍無法上網請建檔軟體缺陷報告").setAutoCancel(true);
-                                            mNotificationManager =
-                                                    (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-
-                                            mNotificationManager.notify(1, builder.build());
-                                        }
-                                    });
-                        }
-                        else {
-                            builder = new NotificationCompat.Builder(context).setSmallIcon(R.drawable.ic_stat_action_perm_scan_wifi).setContentTitle("正在自動登入海大校園無線網路……").setContentText("請稍候片刻").setAutoCancel(true);
-
-                            mNotificationManager =
-                                    (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-
-                            mNotificationManager.notify(1, builder.build());
-
-                            Log.v(TAG, "SSID:".concat(manager.getConnectionInfo().getSSID()));
-
-                            try {
-                                CookieManager cookiemanager = new CookieManager();
-                                CookieHandler.setDefault(cookiemanager);
-                                URL ruckus_url = new URL("https://140.121.40.253/user/user_login_auth.jsp?");
-                                URL ruckus_url_2 = new URL("https://140.121.40.253/user/user_login_auth.jsp?");
-                                URL ruckus_url_3 = new URL("https://140.121.40.253/user/_allowuser.jsp?");
-                                HttpURLConnection connection = (HttpURLConnection) ruckus_url.openConnection();
-                                connection.setReadTimeout(10000);
-                                connection.setConnectTimeout(15000);
-                                connection.setRequestMethod("POST");
-                                connection.setRequestProperty("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.9; rv:26.0) Gecko/20100101 Firefox/26.0");
-                                connection.setDoOutput(true);
-
-                                DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
-                                wr.writeBytes("username=".concat(student_id).concat("&password=".concat(password).concat("&ok=").concat("登入")));
-                                Map<String, List<String>> headerFields = connection.getHeaderFields();
-                                List<String> cookiesHeader = headerFields.get(COOKIES_HEADER);
-                                if (cookiesHeader != null) {
-                                    for (String cookie : cookiesHeader) {
-                                        cookiemanager.getCookieStore().add(null, HttpCookie.parse(cookie).get(0));
-                                    }
-                                }
-
-                                wr.flush();
-                                wr.close();
-
-                                HttpURLConnection connection_2 = (HttpURLConnection) ruckus_url_2.openConnection();
-                                connection_2.setReadTimeout(10000);
-                                connection_2.setConnectTimeout(15000);
-                                connection_2.setRequestProperty("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.9; rv:26.0) Gecko/20100101 Firefox/26.0");
-
-                                HttpURLConnection connection_3 = (HttpURLConnection) ruckus_url_3.openConnection();
-                                connection_3.setReadTimeout(10000);
-                                connection_3.setConnectTimeout(15000);
-                                connection_3.setRequestProperty("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.9; rv:26.0) Gecko/20100101 Firefox/26.0");
-
-                                builder = new NotificationCompat.Builder(context).setSmallIcon(R.mipmap.application_logo).setContentTitle("已經完成登入程序").setContentText("如仍無法上網請建檔軟體缺陷報告").setAutoCancel(true);
-
-                                mNotificationManager =
-                                        (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-
-                                mNotificationManager.notify(1, builder.build());
-                            } catch (MalformedURLException e) {
-                                Log.d(TAG, "MalformedURLException");
-                            } catch (IOException e) {
-                                Log.d(TAG, "IOException");
-                            }
-                        }
-                        Log.e("GET-method", response);
-                    }
-                });
+    private void processNotify(String contentTxt) {
+        builder = new NotificationCompat.Builder(context);
+        builder.setContentTitle("校園 wifi");
+        builder.setSmallIcon(R.drawable.ic_stat_action_perm_scan_wifi);
+        builder.setContentText(contentTxt);
+        builder.setAutoCancel(true);
+        mNotificationManager =
+                (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        Notification notification = builder.build();
+        mNotificationManager.notify(1, notification);
     }
 }

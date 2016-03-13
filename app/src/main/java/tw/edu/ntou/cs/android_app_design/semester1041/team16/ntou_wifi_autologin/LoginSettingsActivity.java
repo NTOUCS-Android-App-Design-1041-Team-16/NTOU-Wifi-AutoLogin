@@ -38,10 +38,12 @@ public class LoginSettingsActivity extends AppCompatActivity {
 
 		if(checkAuto.isChecked()) {
 			Intent intent = new Intent(LoginSettingsActivity.this, AutoLoginService.class);
+			Toast.makeText(getApplicationContext(), "自動登入啟動", Toast.LENGTH_LONG).show();
 			startService(intent);
 		}
 		else {
 			Intent intent = new Intent(LoginSettingsActivity.this, AutoLoginService.class);
+			Toast.makeText(getApplicationContext(), "自動登入關閉", Toast.LENGTH_LONG).show();
 			stopService(intent);
 		}
 
@@ -50,10 +52,12 @@ public class LoginSettingsActivity extends AppCompatActivity {
 			public void onClick(View v) {
 				if(checkAuto.isChecked()) {
 					Intent intent = new Intent(LoginSettingsActivity.this, AutoLoginService.class);
+					Toast.makeText(getApplicationContext(), "自動登入啟動", Toast.LENGTH_LONG).show();
 					startService(intent);
 				}
 				else {
 					Intent intent = new Intent(LoginSettingsActivity.this, AutoLoginService.class);
+					Toast.makeText(getApplicationContext(), "自動登入關閉", Toast.LENGTH_LONG).show();
 					stopService(intent);
 				}
 			}
@@ -63,18 +67,18 @@ public class LoginSettingsActivity extends AppCompatActivity {
 	}
 
 	@Override
-	protected void onStart(){
+	protected void onStart() {
 		super.onStart();
 		loadPreferences();
 	}
 
 	@Override
-	protected void onPause(){
+	protected void onPause() {
 		super.onPause();
 	}
 
 	@Override
-	protected void onStop(){
+	protected void onStop() {
 		super.onStop();
 
 		savePreferences();
@@ -91,13 +95,13 @@ public class LoginSettingsActivity extends AppCompatActivity {
 			else {
 				savePreferences();
 				LoginHandle handleLogin = new LoginHandle(getApplicationContext());
-				handleLogin.HandleLogin();
+				handleLogin.HandleLogin(studentNum.getText().toString(), password.getText().toString());
 			}
 
 		}
 	};
 
-	public void loadPreferences(){
+	public void loadPreferences() {
 
 		Log.i(TAG, "載入設定……");
 		SharedPreferences config = getSharedPreferences(CONFIG_FILENAME, Context.MODE_PRIVATE);
@@ -106,7 +110,7 @@ public class LoginSettingsActivity extends AppCompatActivity {
 		((EditText) findViewById(R.id.editText_login_settings_password)).setText(config.getString("password", ""));
 	}
 
-	public void savePreferences(){
+	public void savePreferences() {
 		Log.i(TAG, "保存設定……");
 
 		SharedPreferences config = getSharedPreferences(CONFIG_FILENAME, Context.MODE_PRIVATE);

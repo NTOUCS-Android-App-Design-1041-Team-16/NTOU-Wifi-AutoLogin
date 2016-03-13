@@ -32,7 +32,7 @@ public class AutoLoginService extends Service {
 		loadPreferences();
 
 		LoginHandle handleLogin = new LoginHandle(getApplicationContext());
-		handleLogin.HandleLogin();
+		handleLogin.HandleLogin(student_id, password);
 	}
 
 	public void loadPreferences()  {
