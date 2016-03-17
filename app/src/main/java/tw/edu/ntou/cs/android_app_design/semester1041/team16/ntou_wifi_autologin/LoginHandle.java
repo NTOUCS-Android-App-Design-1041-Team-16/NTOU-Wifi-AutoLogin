@@ -65,7 +65,6 @@ public class LoginHandle {
             WifiInfo wifiInfo = manager.getConnectionInfo();
             if (wifiInfo.getSupplicantState() == SupplicantState.COMPLETED) {
                 ssid = wifiInfo.getSSID();
-                Log.e("ssid", ssid);
             }
 
             if(ssid.equals("") == false) {
@@ -74,10 +73,11 @@ public class LoginHandle {
                 }
                 else if (password.length() == 0) {
                     Toast.makeText(context.getApplicationContext(), "請輸入密碼", Toast.LENGTH_SHORT).show();
-                } else {
+                }
+                else {
                     //run php script
-                    exec(context.getFilesDir().getPath() + "/php-cgi " + context.getFilesDir().getPath() + "/auth_with_arg.php " + String.valueOf('"') + ssid + String.valueOf('"') + " " + String.valueOf('"') + student_id + String.valueOf('"')
-                            + " " + String.valueOf('"') + password + String.valueOf('"'));
+                    if(ssid.contains("nttu") || ssid.contains("ntou") || ssid.contains("NCTU") || ssid.contains("nctu"))
+                        exec(context.getFilesDir().getPath() + "/php-cgi " + context.getFilesDir().getPath() + "/auth_with_arg.php " + student_id + " " + password);
                 }
             }
             else {
@@ -132,6 +132,7 @@ public class LoginHandle {
             if(exitCode == Integer.MIN_VALUE) {
                 //Timeout
                 //建立連線逾時！(notification)
+                process.destroy();
                 processNotify("處理登入逾時！");
             }
 
@@ -176,6 +177,9 @@ public class LoginHandle {
                 }
                 else if(scriptRes.equals("auth_success")) {
                     processNotify("登入成功！");
+                }
+                else if(scriptRes.equals("please input email or password")) {
+                    processNotify("請設定學校信箱與密碼！");
                 }
                 else {
                     processNotify("登入失敗！");
