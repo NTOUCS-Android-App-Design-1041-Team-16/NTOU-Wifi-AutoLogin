@@ -41,7 +41,8 @@
 					echo "auth_success";
 			}
 			else {
-				echo "It's auth or you are not in this wireless access point.";
+				print_r($response["ERROR"]);
+				//echo "It's auth or you are not in this wireless access point.";
 			}
 		}
 		else {

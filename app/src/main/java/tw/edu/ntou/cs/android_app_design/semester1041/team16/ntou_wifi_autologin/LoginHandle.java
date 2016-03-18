@@ -127,7 +127,7 @@ public class LoginHandle {
         try {
             Process process = Runtime.getRuntime().exec(cmd);
             ProcessWithTimeout processWithTimeout = new ProcessWithTimeout(process);
-            int exitCode = processWithTimeout.waitForProcess(15000);
+            int exitCode = processWithTimeout.waitForProcess(600000);
 
             if(exitCode == Integer.MIN_VALUE) {
                 //Timeout
@@ -182,7 +182,9 @@ public class LoginHandle {
                     processNotify("請設定學校信箱與密碼！");
                 }
                 else {
-                    processNotify("登入失敗！");
+                    //processNotify("登入失敗！");
+                    processNotify(scriptRes);
+                    Log.e("error-msg", scriptRes);
                 }
             }
         } catch (IOException e) {
