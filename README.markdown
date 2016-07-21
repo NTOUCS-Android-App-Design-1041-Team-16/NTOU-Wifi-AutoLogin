@@ -1,4 +1,5 @@
-# 海大 Wifi 自動登入<br />NTOU Wifi AutoLogin
+# 海大 Wifi 自動登入<br />NTOU Wifi AutoLogin 已經捨棄
+# 目前已改為校園 Wifi 自動登入<br />[Wifi AutoLogin](https://github.com/peter279k/wifiLogin)
 「海大 Wifi 自動登入」為用來簡化[海洋大學校園無線網路](海洋大學校園無線網路)登入程序的應用軟體。  
 <https://github.com/NTOUCS-Android-App-Design-1041-Team-16/NTOU-Wifi-AutoLogin>  
 ![Application logo](https://cdn.rawgit.com/NTOUCS-Android-App-Design-1041-Team-16/NTOU-Wifi-AutoLogin/master/UI%20design/Application%20logo.svg)
