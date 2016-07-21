@@ -23,6 +23,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.net.Inet4Address;
+import java.net.InetAddress;
+import java.util.concurrent.ExecutionException;
 
 public class LoginHandle {
     private Context context;
@@ -76,8 +79,38 @@ public class LoginHandle {
                 }
                 else {
                     //run php script
-                    if(ssid.contains("nttu") || ssid.contains("ntou") || ssid.contains("NCTU") || ssid.contains("nctu"))
-                        exec(context.getFilesDir().getPath() + "/php-cgi " + context.getFilesDir().getPath() + "/auth_with_arg.php " + student_id + " " + password);
+                    //if(ssid.contains("nttu") || ssid.contains("ntou") || ssid.contains("NCTU") || ssid.contains("nctu"))
+
+                    Process launchAuth = null;
+
+                    try {
+                        String netAddress = new NetTask().execute("google.com.tw", "www.gstatic.com", "securelogin.arubanetworks.com").get();
+
+                        String []addressArr = netAddress.trim().split(",");
+
+                        if(addressArr.length == 2) {
+                            launchAuth = Runtime.getRuntime().exec(context.getFilesDir().getPath() + "/php-cgi " + context.getFilesDir().getPath() + "/auth_with_arg.php " + student_id + " " + password + " "
+                                    + addressArr[0] + " " + addressArr[1] + " " + "cannot-find-ip");
+                        }
+                        else {
+                            launchAuth = Runtime.getRuntime().exec(context.getFilesDir().getPath() + "/php-cgi " + context.getFilesDir().getPath() + "/auth_with_arg.php " + student_id + " " + password + " "
+                                    + addressArr[0] + " " + addressArr[1] + " " + addressArr[2]);
+                        }
+
+                        new Thread(new execThread(launchAuth, context)).start();
+
+                        if (launchAuth.waitFor() == 0) {
+                            Log.e("launch-msg", "launch auth done");
+                        }
+                    }
+                    catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    catch (InterruptedException e) {
+                        e.printStackTrace();
+                    } catch (ExecutionException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
             else {
@@ -121,77 +154,6 @@ public class LoginHandle {
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo mWifi = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
         return mWifi.isConnected();
-    }
-
-    private void exec(String cmd) {
-        try {
-            Process process = Runtime.getRuntime().exec(cmd);
-            ProcessWithTimeout processWithTimeout = new ProcessWithTimeout(process);
-            int exitCode = processWithTimeout.waitForProcess(600000);
-
-            if(exitCode == Integer.MIN_VALUE) {
-                //Timeout
-                //建立連線逾時！(notification)
-                process.destroy();
-                processNotify("處理登入逾時！");
-            }
-
-            else {
-                BufferedReader reader = new BufferedReader(
-                        new InputStreamReader(process.getInputStream()));
-                int read;
-                char[] buffer = new char[4096];
-                StringBuffer output = new StringBuffer();
-                while ((read = reader.read(buffer)) > 0) {
-                    output.append(buffer, 0, read);
-                }
-
-                reader.close();
-                process.waitFor();
-
-                if (output.toString().length() != 0) {
-                    Log.e("output-" + cmd, "output: " + output.toString());
-                    scriptRes = output.toString();
-                }
-                else {
-                    reader = new BufferedReader(
-                            new InputStreamReader(process.getErrorStream()));
-
-                    buffer = new char[4096];
-                    output = new StringBuffer();
-
-                    while ((read = reader.read(buffer)) > 0) {
-                        output.append(buffer, 0, read);
-                    }
-
-                    reader.close();
-
-                    scriptRes = output.toString();
-                    Log.e("output-error-" + cmd, output.toString());
-                }
-
-                scriptRes = scriptRes.trim();
-
-                if(scriptRes.equals("It's auth or you are not in this wireless access point.")) {
-                    processNotify("已經正確連上網路或是還沒認證！");
-                }
-                else if(scriptRes.equals("auth_success")) {
-                    processNotify("登入成功！");
-                }
-                else if(scriptRes.equals("please input email or password")) {
-                    processNotify("請設定學校信箱與密碼！");
-                }
-                else {
-                    //processNotify("登入失敗！");
-                    processNotify(scriptRes);
-                    Log.e("error-msg", scriptRes);
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
     }
 
     private void processNotify(String contentTxt) {

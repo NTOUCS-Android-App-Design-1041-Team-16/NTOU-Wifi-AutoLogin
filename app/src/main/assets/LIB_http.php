@@ -82,7 +82,7 @@ Webbot defaults (scope = global)
 define("WEBBOT_NAME", "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:31.0) Gecko/20100101 Firefox/31.0");
 
 # Length of time cURL will wait for a response (seconds)
-define("CURL_TIMEOUT", 60);
+define("CURL_TIMEOUT", 0);
 
 # Location of your cookie file. (Must be fully resolved local address)
 define("COOKIE_FILE", "cookie.txt");
